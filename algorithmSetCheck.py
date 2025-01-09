@@ -48,3 +48,5 @@ def noSets(cards): #wisseld 3 kaarten in voor 3 nieuwe kaarten
     for i in range(0,3):
         cards.append(deck.pop())
         cards.popleft()
+
+print(5)
