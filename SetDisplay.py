@@ -1,5 +1,6 @@
 import pygame
 from DeckFunctions import generateTable
+from SetInteractive import draw_button
 
 # Initialize Pygame
 pygame.init()
@@ -9,7 +10,7 @@ screenWidth = 800
 screenHeight = 600
 cardWidth = 100
 cardHeight = 150
-white = (50, 50, 50)
+background = (50, 50, 50)
 
 # Create the Pygame screen
 display = pygame.display.set_mode((screenWidth, screenHeight))
@@ -39,16 +40,16 @@ def loadCardImages():
 cardImages = loadCardImages()
 
 # Function to draw cards on the table
+# Function to draw cards on the table
 def drawTable(cards):
-    display.fill(white)  # Clear the screen
-
     # Constants
     xStart = 50
     yStart = 20
     xSpacing = 120
     ySpacing = 200
+    shadow_offset = 8  # Offset for the shadow
+    shadow_color = (30, 30, 30)  # A darker shade for the shadow
 
-    # Deduce the card name based on atributes
     for i, card in enumerate(cards):
         cardName = f"{['green', 'red', 'purple'][card.color]}" \
                     f"{['diamond', 'oval', 'squiggle'][card.shape]}" \
@@ -59,25 +60,40 @@ def drawTable(cards):
         x = xStart + (i % 4) * xSpacing
         y = yStart + (i // 4) * ySpacing
 
-        # Scale the card images to fit the specified dimensions and draw them on the screen
-        display.blit(pygame.transform.scale(cardImages[cardName], (cardWidth, cardHeight)), (x, y)) 
+        # Draw the shadow first
+        shadow_rect = pygame.Rect(x + shadow_offset, y + shadow_offset, cardWidth, cardHeight)
+        pygame.draw.rect(display, shadow_color, shadow_rect, border_radius=10)
 
-    # Refresh the screen
-    pygame.display.flip()
+        # Draw the card image on top of the shadow
+        card_image = pygame.transform.scale(cardImages[cardName], (cardWidth, cardHeight))
+        display.blit(card_image, (x, y))
+
+
 
 # Generate the initial table of cards
 table = generateTable()
 
-# Create boolean value defining whether the game runs or not
+# Main interactive loop
 running = True
 
-# determines whether to continue or quit the game
 while running:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT: # Checks if the player has closed the window
+        if event.type == pygame.QUIT:  # Checks if the player has closed the window
             running = False
 
+    # Clear the screen
+    display.fill(background)
+
+    # Draw the table
     drawTable(table)
 
-# Will quit the game when the while loop ends
+    # Draw the button
+    button_x = screenWidth - 150 - 20
+    button_y = screenHeight - 50 - 20
+    draw_button(display, "Check Set", button_x, button_y, 150, 50, (70, 70, 70), (255, 255, 255))
+
+    # Update the display after all drawing is complete
+    pygame.display.flip()
+
+# Quit the game
 pygame.quit()
