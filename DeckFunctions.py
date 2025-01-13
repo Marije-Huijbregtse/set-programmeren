@@ -4,7 +4,7 @@ from collections import deque
 from SetFinder import findAllSets
 
 
-def generateDeck(): #genereert een ongesoorteerde set deck
+def generateDeck(): #genereert een gesoorteerde set deck
     index = [0,1,2]
     return [cardSet(n,c,s,sh) for n in index for c in index for s in index for sh in index]
 
@@ -18,8 +18,10 @@ def generateTable(): #pakt het de bovenste 12 kaarten van een geschudde set deck
     for i in range(0,12):
         table.append(deck.pop())
     
-    while len(findAllSets()) == 0:
-        noSets()
+    while len(findAllSets(table)) == 0:
+        noSets(table)
+    
+    return table
 
 
 def noSets(cards): #wisseld 3 kaarten in voor 3 nieuwe kaarten
@@ -29,4 +31,3 @@ def noSets(cards): #wisseld 3 kaarten in voor 3 nieuwe kaarten
         cards.append(deck.pop())
         cards.popleft()
 
-print(generateDeck())
