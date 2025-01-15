@@ -1,5 +1,5 @@
 import pygame
-from SetDeck import generateTable, refillTable
+from SetDeck import generateTable
 from SetDraw import drawButton, drawScores, loadCardImages
 from SetInteractive import drawTable, cardSelection, drawTimer
 from SetFinder import checkSelectedSet, findOneSet, findAllSets
@@ -19,6 +19,9 @@ pygame.display.set_caption("SET Game Display")
 
 # Generate the initial table of cards
 table = generateTable()
+
+from SetDeck import refillTable, deck
+
 
 # Initialize card images
 cardImages = loadCardImages()
@@ -133,7 +136,7 @@ while running:
     drawButton(display, "Check Set", button_x, button_y, 150, 50, (70, 70, 70), (255, 255, 255), is_active=button_pressed)
 
     # Draw the scores
-    drawScores(display, player_score, computer_score, len(findAllSets(table)), 20, 20, (255, 255, 255))
+    drawScores(display, player_score, computer_score, len(findAllSets(table)), len(deck), 20, 20, (255, 255, 255))
 
     # Update the display
     pygame.display.flip()

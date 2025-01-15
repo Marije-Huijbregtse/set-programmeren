@@ -38,7 +38,7 @@ def drawButton(display, text, x, y, width, height, inactive_color, text_color, i
     display.blit(text_surface, text_rect)
 
 
-def drawScores(display, player_score, computer_score, set_counter, x_offset, y_offset, text_color):
+def drawScores(display, player_score, computer_score, set_counter, deck_counter, x_offset, y_offset, text_color):
     font = pygame.font.Font(None, 36)
 
     # Render player score
@@ -55,6 +55,11 @@ def drawScores(display, player_score, computer_score, set_counter, x_offset, y_o
     set_counter_text = font.render(f"Possible sets: {set_counter}", True, text_color)
     set_counter_rect = set_counter_text.get_rect(topright=(screenWidth - x_offset, y_offset + 80))  # Offset for third line
     display.blit(set_counter_text, set_counter_rect)
+
+    # Render deck counter
+    deck_counter_text = font.render(f"Cards left: {deck_counter}", True, text_color)
+    deck_counter_rect = deck_counter_text.get_rect(topright=(screenWidth - x_offset, y_offset + 120))  # Offset for fourth line
+    display.blit(deck_counter_text, deck_counter_rect)
 
 # Load card images from the 'kaarten' folder
 def loadCardImages():
