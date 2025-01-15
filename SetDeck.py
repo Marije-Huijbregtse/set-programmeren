@@ -1,4 +1,4 @@
-from setclass import cardSet
+from SetClass import cardSet
 import random
 from collections import deque
 from SetFinder import findAllSets
@@ -18,9 +18,19 @@ def generateTable(): #pakt het de bovenste 12 kaarten van een geschudde set deck
     for i in range(0,12):
         table.append(deck.pop())
     
-    while len(findAllSets(table)) == 0:
+    while len(findAllSets(table)) == 0 and deck: # the 'and deck' part ensures there are cards in the deck
         noSets(table)
     
+    return table
+
+def refillTable(table):
+    table = [card for card in table if not card.selected]
+
+    while len(table) < 12 and deck: 
+        table.append(deck.pop())
+    
+    while len(findAllSets(table)) == 0 and deck:
+        noSets(table)
     return table
 
 

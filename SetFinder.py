@@ -1,5 +1,5 @@
 from itertools import combinations
-from setclass import cardSet
+from SetClass import cardSet
 
 def isSet(card1,card2,card3): #functie om te checken of 3 kaarten een set zijn of niet
     return ( (card1.number + card2.number + card3.number)%3 == 0 
@@ -20,3 +20,10 @@ def findAllSets(cards): #vind alle sets in een lijst (cards)
         if isSet(*combo):
             sets.append(combo)
     return sets
+
+def checkSelectedSet(cards):
+    selected_cards = [card for card in cards if card.selected]
+    if len(selected_cards) == 3:
+        if isSet(*selected_cards):  # Use the isSet function from SetFinder.py
+            return True
+    return False
