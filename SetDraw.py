@@ -1,4 +1,6 @@
 import pygame
+import math # Needed for the drawTimer function
+
 
 # Global constants
 cardWidth = 100
@@ -82,3 +84,17 @@ def loadCardImages():
     return cardImages
 
 
+def drawTimer(display, x, y, radius, elapsed_ratio, base_color, time_color):
+    # Draw the background circle
+    pygame.draw.circle(display, base_color, (x, y), radius)
+
+    # Draw the remaining time as an arc
+    remaining_angle = math.pi * 2 * (1 - elapsed_ratio)
+    pygame.draw.arc(
+        display,
+        time_color,
+        (x - radius, y - radius, 2 * radius, 2 * radius),
+        -math.pi / 2,  # Start angle at the top
+        -math.pi / 2 + remaining_angle,  # End angle based on elapsed time
+        width=10
+    )

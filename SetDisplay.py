@@ -1,7 +1,12 @@
 import pygame
 from SetDeck import generateTable
-from SetDraw import drawButton, drawScores, loadCardImages
-from SetInteractive import drawTable, cardSelection, drawTimer
+
+# Generate the initial table of cards and will run this fucntion to be able to import 'deck'
+table = generateTable()
+
+from SetDeck import refillTable, noCards, deck
+from SetDraw import drawButton, drawScores, loadCardImages,drawTimer
+from SetInteractive import drawTable, cardSelection
 from SetFinder import checkSelectedSet, findOneSet, findAllSets
 
 # Initialize Pygame
@@ -16,25 +21,24 @@ background = (50, 50, 50)
 display = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("SET Game Display")
 
-
-# Generate the initial table of cards
-table = generateTable()
-
-from SetDeck import refillTable, deck
-
-
 # Initialize card images
 cardImages = loadCardImages()
 
 # Main interactive loop
 running = True
+endGame = False
 
 # Initialize scores
 player_score = 0
 computer_score = 0
 
-# Initialize button state
+# Initialize button constants
 button_pressed = False
+button_x = screenWidth - 150 - 20
+button_y = screenHeight - 50 - 20
+
+# Initialize game over end screen time delay
+delay = 0
 
 # Timer settings
 total_time = 30000  # 30 seconds in milliseconds
@@ -45,7 +49,6 @@ time_elapsed = 0
 current_message = None
 message_start_time = 0  # Timestamp when the message was set
 message_display_duration = 1000  # Duration to display the message (in milliseconds)
-
 
 while running:
     current_time = pygame.time.get_ticks()
@@ -82,14 +85,20 @@ while running:
         computer_Set = findOneSet(table)
         for card in table:
             if card in computer_Set:
-                card.selected = True
+                card.selected = True # Selects the cards in the computer found set
             else:
-                card.selected = False # Ensures only the set the com found will be selected
-        drawTable(display, table, pygame.mouse.get_pos(), cardImages)
+                card.selected = False # Ensures only the set the computer found will be selected
+
+        # Clear the screen
+        display.fill(background)
+        drawTable(display, table, pygame.mouse.get_pos(), cardImages) # Only draws the table, no scores/timer/message/button
+
         pygame.display.flip()
         pygame.time.delay(3000)
-        table = refillTable(table)
+        table = refillTable(table, deck)
         start_time = pygame.time.get_ticks()
+        if len(table) < 12 or len(findAllSets(table)) == 0:
+            endGame = True
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -105,19 +114,50 @@ while running:
                     player_score += 1
                     current_message = "Good job!"
                     message_start_time = pygame.time.get_ticks()
-                    table = refillTable(table)
+                    table = refillTable(table, deck)
                     start_time = pygame.time.get_ticks()
+                    if len(table) < 12 or len(findAllSets(table)) == 0:
+                        endGame = True
                 else:
                     current_message = "Not a set"
                     message_start_time = pygame.time.get_ticks()
                 button_pressed = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_0:
+                deck = []
 
     # Clear the screen
     display.fill(background)
 
+    if endGame:
+        # Clear the screen
+        display.fill(background)
+
+        # Display the final scores
+        font = pygame.font.Font(None, 60)
+        player_score_text = font.render(f"Player Score: {player_score}", True, (255, 255, 255))
+        computer_score_text = font.render(f"Computer Score: {computer_score}", True, (255, 255, 255))
+
+        # Center the text on the screen
+        player_rect = player_score_text.get_rect(center=(screenWidth // 2, screenHeight // 2 - 50))
+        computer_rect = computer_score_text.get_rect(center=(screenWidth // 2, screenHeight // 2 + 50))
+
+        # Draw the text
+        display.blit(player_score_text, player_rect)
+        display.blit(computer_score_text, computer_rect)
+
+        # Update the display
+        pygame.display.flip()
+
+        # Wait for a moment before quitting
+        pygame.time.delay(3000)
+        running = False
+        continue
+
     # Draw the timer (blink effect in last 5 seconds)
     if blink:
         drawTimer(display, 580, 40, 30, elapsed_ratio, (70, 70, 70), (255, 0, 0))
+        
 
     # Display the current message
     if current_message:
@@ -127,16 +167,17 @@ while running:
         text_rect = text_surface.get_rect(center=(650, 280))
         display.blit(text_surface, text_rect)
 
-    # Draw the table with hover effect
+
+    # Draw the table
     drawTable(display, table, pygame.mouse.get_pos(), cardImages)
 
     # Draw the button
-    button_x = screenWidth - 150 - 20
-    button_y = screenHeight - 50 - 20
     drawButton(display, "Check Set", button_x, button_y, 150, 50, (70, 70, 70), (255, 255, 255), is_active=button_pressed)
 
     # Draw the scores
     drawScores(display, player_score, computer_score, len(findAllSets(table)), len(deck), 20, 20, (255, 255, 255))
+
+
 
     # Update the display
     pygame.display.flip()

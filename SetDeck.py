@@ -1,8 +1,8 @@
-from SetClass import cardSet
 import random
+import pygame
+from SetClass import cardSet
 from collections import deque
 from SetFinder import findAllSets
-
 
 def generateDeck(): #genereert een gesoorteerde set deck
     index = [0,1,2]
@@ -23,7 +23,7 @@ def generateTable(): #pakt het de bovenste 12 kaarten van een geschudde set deck
     
     return table
 
-def refillTable(table):
+def refillTable(table, deck):
     table = [card for card in table if not card.selected]
 
     while len(table) < 12 and deck: 
@@ -34,10 +34,9 @@ def refillTable(table):
     return table
 
 
-def noSets(cards): #wisseld 3 kaarten in voor 3 nieuwe kaarten
+def noSets(cards): # wisseld 3 kaarten in voor 3 nieuwe kaarten
     cards = deque()
 
     for i in range(0,3):
         cards.append(deck.pop())
         cards.popleft()
-

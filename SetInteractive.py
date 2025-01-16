@@ -1,5 +1,4 @@
 import pygame
-import math # Needed for the drawTimer function
 
 # Function to handle first display and hover effect for cards
 def drawTable(display, cards, mouse_pos, card_images):
@@ -10,6 +9,7 @@ def drawTable(display, cards, mouse_pos, card_images):
     ySpacing = 200
     shadow_offset = 8  # Offset for the shadow
     shadow_color = (30, 30, 30)  # Shadow color
+    shadow__select_color = (0, 152, 15) #Shadow select color
     card_grow_size = 115
 
     for i, card in enumerate(cards):
@@ -26,7 +26,14 @@ def drawTable(display, cards, mouse_pos, card_images):
         card_rect = pygame.Rect(x, y, 100, 150)
 
         # Check if the card is selected or hovered
-        if card.selected or card_rect.collidepoint(mouse_pos):
+        if card.selected:
+            # Enlarge the card and draw its shadow
+            enlarged_shadow_rect = pygame.Rect(x + shadow_offset - 5, y + shadow_offset - 7, card_grow_size, card_grow_size * 1.5)
+            pygame.draw.rect(display, shadow__select_color, enlarged_shadow_rect, border_radius=10)
+
+            enlarged_image = pygame.transform.scale(card_images[cardName], (card_grow_size, card_grow_size * 1.5))
+            display.blit(enlarged_image, (x - 5, y - 7))
+        elif card_rect.collidepoint(mouse_pos):
             # Enlarge the card and draw its shadow
             enlarged_shadow_rect = pygame.Rect(x + shadow_offset - 5, y + shadow_offset - 7, card_grow_size, card_grow_size * 1.5)
             pygame.draw.rect(display, shadow_color, enlarged_shadow_rect, border_radius=10)
@@ -67,18 +74,3 @@ def cardSelection(cards, mouse_pos):
             elif card.selected:
                 card.selected = False  # Deselect the card
             break
-
-def drawTimer(display, x, y, radius, elapsed_ratio, base_color, time_color):
-    # Draw the background circle
-    pygame.draw.circle(display, base_color, (x, y), radius)
-
-    # Draw the remaining time as an arc
-    remaining_angle = math.pi * 2 * (1 - elapsed_ratio)
-    pygame.draw.arc(
-        display,
-        time_color,
-        (x - radius, y - radius, 2 * radius, 2 * radius),
-        -math.pi / 2,  # Start angle at the top
-        -math.pi / 2 + remaining_angle,  # End angle based on elapsed time
-        width=10
-    )
