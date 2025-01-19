@@ -4,8 +4,8 @@ from SetDeck import generateTable
 # Generate the initial table of cards and will run this fucntion to be able to import 'deck'
 table = generateTable()
 
-from SetDeck import refillTable, deck
-from SetDraw import drawTable, drawButton, drawScores, loadCardImages, drawTimer
+from SetDeck import refillTable, loadCardImages, deck
+from SetDraw import drawTable, drawButton, drawScores, drawTimer
 from SetInteractive import cardSelection
 from SetFinder import checkSelectedSet, findOneSet, findAllSets
 
@@ -15,6 +15,7 @@ pygame.init()
 # Constants
 screenWidth = 800
 screenHeight = 600
+
 # Create the Pygame screen
 display = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("SET Game Display")
@@ -249,4 +250,5 @@ while running:
     # Update the display
     pygame.display.flip()
 
+# When running will be false, will quit
 pygame.quit()

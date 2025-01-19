@@ -1,6 +1,27 @@
 import pygame
 
 def cardSelection(cards, mouse_pos):
+    """
+    Handles the selection and deselection of cards based on mouse click position.
+
+    This function determines which card (if any) was clicked by checking the mouse 
+    position against the card's hitbox. If a card is clicked, it toggles its selection 
+    status. A maximum of three cards can be selected at a time.
+
+    Args:
+        cards (list): A list of card objects, each with a `selected` attribute indicating 
+                      its selection status.
+        mouse_pos (tuple): The (x, y) coordinates of the mouse click.
+
+    Constants:
+        - xStart: Starting x-coordinate for card placement.
+        - yStart: Starting y-coordinate for card placement.
+        - xSpacing: Horizontal spacing between cards.
+        - ySpacing: Vertical spacing between cards.
+
+    Returns:
+        None: Modifies the `selected` attribute of the cards in place.
+    """
     # Constants for card positioning
     xStart = 50
     yStart = 20
