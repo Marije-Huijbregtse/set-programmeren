@@ -1,5 +1,40 @@
-from itertools import combinations
-from SetClass import cardSet
+
+def combinations(iterable, r):
+    """
+    Makes all possible combinations of `r` elements from the given `iterable`.
+
+    This function works like `itertools.combinations`, producing combinations 
+    as tuples in lexicographic order. The input iterable is treated as a pool of elements, 
+    and combinations are yielded without repetition.
+
+    Args:
+        iterable: An iterable from which we can draw elements (e.g., list, tuple, string).
+        r (int): The number of elements in each combination.
+
+    Returns:
+        list: A list of tuples, where each tuple is a combination of `r` elements from 
+        the input iterable. Returns an empty list if `r > len(iterable)`.
+    """
+    pool = tuple(iterable)
+    n = len(pool)
+    if r > n:
+        return []
+    
+    indices = list(range(r))
+    result = [tuple(pool[i] for i in indices)]
+    
+    while True:
+        for i in reversed(range(r)):
+            if indices[i] != i + n - r:
+                break
+        else:
+            break
+        indices[i] += 1
+        for j in range(i + 1, r):
+            indices[j] = indices[j - 1] + 1
+        result.append(tuple(pool[i] for i in indices))
+    
+    return result
 
 def isSet(card1, card2, card3):
     """

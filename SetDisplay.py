@@ -12,11 +12,11 @@ from SetFinder import checkSelectedSet, findOneSet, findAllSets
 # Initialize Pygame
 pygame.init()
 
-# Constants
+# Screen dimensions
 screenWidth = 800
 screenHeight = 600
 
-# Create the Pygame screen
+# Creating the Pygame screen
 display = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("SET Game Display")
 
@@ -27,7 +27,7 @@ background_image = pygame.transform.scale(background_image, (screenWidth, screen
 # Initialize card images
 cardImages = loadCardImages()
 
-# Main interactive loop
+# Main loops
 running = True
 endGame = False
 
@@ -39,9 +39,6 @@ computer_score = 0
 button_pressed = False
 button_x = screenWidth - 150 - 20
 button_y = screenHeight - 50 - 20
-
-# Initialize game over end screen time delay
-delay = 0
 
 # Timer settings
 total_time = 30000  # 30 seconds in milliseconds
@@ -81,7 +78,8 @@ while running:
         elif 0 <= remaining_time <= 5:
             current_message = str(remaining_time)
 
-    if time_elapsed >= total_time: # If 30 seconds has passed
+    # If 30 seconds has passed:
+    if time_elapsed >= total_time: 
         current_message = "Computer has found a set!"
         message_start_time = pygame.time.get_ticks()
         computer_score += 1
@@ -100,19 +98,20 @@ while running:
         table = refillTable(table, deck)
         start_time = pygame.time.get_ticks()
 
-    if len(table) < 12 or len(findAllSets(table)) == 0: # If the table can only be refilled with less than 12 cards or there are no more sets left
+    # If the table can only be refilled with less than 12 cards or there are no more sets left
+    if len(table) < 12 or len(findAllSets(table)) == 0: 
         endGame = True
 
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT: # If the game has quit
             running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # If the mouse has been pressed down
             mouse_pos = pygame.mouse.get_pos()
             cardSelection(table, mouse_pos)
-            if button_x <= mouse_pos[0] <= button_x + 150 and button_y <= mouse_pos[1] <= button_y + 50:
+            if button_x <= mouse_pos[0] <= button_x + 150 and button_y <= mouse_pos[1] <= button_y + 50: # If the button has been pressed
                 button_pressed = True
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            if button_pressed and button_x <= mouse_pos[0] <= button_x + 150 and button_y <= button_y + 50: # Only when the button is raised will it execute its code
+            if button_pressed and button_x <= mouse_pos[0] <= button_x + 150 and button_y <= button_y + 50: # If the button has been raised
                 if checkSelectedSet(table):
                     player_score += 1
                     current_message = "Good job!"
@@ -125,8 +124,8 @@ while running:
                     current_message = "Not a set"
                     message_start_time = pygame.time.get_ticks()
                 button_pressed = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_0:
+        elif event.type == pygame.KEYDOWN: 
+            if event.key == pygame.K_0: # If '0' has been pressed
                 deck = []
 
     # Clear the screen
