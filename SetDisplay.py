@@ -81,7 +81,7 @@ while running:
         elif 0 <= remaining_time <= 5:
             current_message = str(remaining_time)
 
-    if time_elapsed >= total_time:
+    if time_elapsed >= total_time: # If 30 seconds has passed
         current_message = "Computer has found a set!"
         message_start_time = pygame.time.get_ticks()
         computer_score += 1
@@ -92,8 +92,7 @@ while running:
             else:
                 card.selected = False # Ensures only the set the computer found will be selected
 
-        # Clear the screen
-        display.blit(background_image, (0, 0))  # Draw at the top-left corner
+        display.blit(background_image, (0, 0)) # Clear the screen 
         drawTable(display, table, pygame.mouse.get_pos(), cardImages) # Only draws the table, no scores/timer/message/button
 
         pygame.display.flip()
@@ -101,7 +100,7 @@ while running:
         table = refillTable(table, deck)
         start_time = pygame.time.get_ticks()
 
-    if len(table) < 12 or len(findAllSets(table)) == 0:
+    if len(table) < 12 or len(findAllSets(table)) == 0: # If the table can only be refilled with less than 12 cards or there are no more sets left
         endGame = True
 
     for event in pygame.event.get():
@@ -113,7 +112,7 @@ while running:
             if button_x <= mouse_pos[0] <= button_x + 150 and button_y <= mouse_pos[1] <= button_y + 50:
                 button_pressed = True
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            if button_pressed and button_x <= mouse_pos[0] <= button_x + 150 and button_y <= button_y + 50:
+            if button_pressed and button_x <= mouse_pos[0] <= button_x + 150 and button_y <= button_y + 50: # Only when the button is raised will it execute its code
                 if checkSelectedSet(table):
                     player_score += 1
                     current_message = "Good job!"
@@ -244,10 +243,10 @@ while running:
                 is_active=False
             )
 
-            # Update the display
+            # Update the display in the end game loop
             pygame.display.flip()
 
-    # Update the display
+    # Update the display in the main while running loop
     pygame.display.flip()
 
 # When running will be false, will quit
