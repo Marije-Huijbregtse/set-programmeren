@@ -4,6 +4,7 @@ from SetDeck import generateTable
 # Generate the initial table of cards and will run this fucntion to be able to import 'deck'
 table = generateTable()
 
+
 from SetDeck import refillTable, loadCardImages, deck
 from SetDraw import drawTable, drawButton, drawScores, drawTimer
 from SetInteractive import cardSelection

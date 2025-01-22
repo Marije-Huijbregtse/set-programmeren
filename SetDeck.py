@@ -97,11 +97,11 @@ def noSets(table):
     Returns:
         None
     """
-    table = deque()
-
-    for i in range(0,3):
-        table.append(deck.pop())
-        table.popleft()
+    table = deque(table) # Treats the list 'table' as a que for efficient popping on the left
+    for _ in range(3):
+        if deck: # Ensure the deck is not empty before popping
+            table.append(deck.pop())
+            table.popleft()
 
 
 def loadCardImages():
@@ -136,8 +136,9 @@ def loadCardImages():
         for shape in shapes:
             for shade in shades:
                 for number in numbers:
-                    cardName = f"{color}{shape}{shade}{number}"            # FIgure out the card name based on atributes
+                    cardName = f"{color}{shape}{shade}{number}"            # Figure out the card name based on atributes
                     imagePath = f"{"kaarten"}/{cardName}.gif"              # Create the file path to find the cards
-                    cardImages[cardName] = pygame.image.load(imagePath)    # Load the image into pygame memory making it ready for using in the game
+                    cardImages[cardName] = pygame.image.load(imagePath)    # Load the image into pygame memory, 
+                                                                           # making it ready for using in the game
 
     return cardImages
