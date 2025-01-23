@@ -1,6 +1,6 @@
 import random
 import pygame
-from SetClass import cardSet
+from setclass import cardSet
 from collections import deque
 from SetFinder import findAllSets
 
